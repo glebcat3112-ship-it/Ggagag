@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="theme-color" content="#0d0e10">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title></title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;600&family=Manrope:wght@500;600;700;800&family=Onest:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+:root{
+  /* ЦВЕТА ТЕМЫ — меняйте здесь */
+  --bg:#0d0e10;      /* фон приложения */
+  --card:#1a1c20;    /* карточки */
+  --soft:#25282d;    /* плашки, активная вкладка */
+  --line:#2a2d33;    /* разделители */
+  --text:#f1f2f4;    /* основной текст */
+  --muted:#8b9099;  /* серый текст */
+  --acc1:#6d737d; --acc2:#3a3e45; /* градиент кнопок */
+  --lnk:#b5bbc4;     /* МАКС, акценты */
+  --green:#3ec486; --red:#ef6a65;
+  color-scheme:dark;
+  --safe-b:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,Inter,sans-serif;overscroll-behavior:none}
+body{min-height:100vh;padding-bottom:calc(88px + var(--safe-b))}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+input{font:inherit;color:inherit;border:0;outline:0;background:none;width:100%}
+.app{max-width:520px;margin:0 auto;padding:0 16px}
+
+.top{display:flex;align-items:center;justify-content:space-between;padding:14px 0 6px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:20px;letter-spacing:-.3px}
+.logo{width:34px;height:34px;border-radius:11px;background:linear-gradient(145deg,#6a7079,#2b2f34);display:grid;place-items:center;box-shadow:0 4px 12px rgba(30,34,40,.25)}
+.chip{display:flex;align-items:center;gap:8px;background:var(--card);padding:5px 12px 5px 5px;border-radius:30px;font-size:14px;font-weight:500;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.ava{width:28px;height:28px;border-radius:50%;background:linear-gradient(145deg,#8a9099,#4a4f56);color:#fff;display:grid;place-items:center;font-size:13px;font-weight:600;overflow:hidden;flex:none}
+.ava img{width:100%;height:100%;object-fit:cover}
+
+.bal{text-align:center;padding:22px 0 18px}
+.bal .sum{font-size:44px;font-weight:700;letter-spacing:-1.5px;display:inline-flex;align-items:center;gap:10px}
+.bal .sum small{font-size:30px;color:var(--muted);font-weight:600}
+.eye{width:26px;height:26px;color:var(--muted)}
+.bal .sub{color:var(--muted);font-size:14px;margin-top:2px}
+.actions{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:20px}
+.act{display:flex;flex-direction:column;align-items:center;gap:8px;font-size:13px;font-weight:500;color:#3a3f46}
+.act .ic{width:54px;height:54px;border-radius:50%;background:linear-gradient(145deg,var(--acc1),var(--acc2));display:grid;place-items:center;color:#fff;box-shadow:0 6px 16px rgba(30,34,40,.22);transition:transform .15s}
+.act:active .ic{transform:scale(.92)}
+
+.banners{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;margin:22px -16px 0;padding:0 16px;scrollbar-width:none}
+.banners::-webkit-scrollbar{display:none}
+.bn{flex:0 0 100%;scroll-snap-align:center;border-radius:20px;padding:18px;background:linear-gradient(135deg,#ffffff,#e3e6ea);display:flex;align-items:center;gap:14px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.bn .bi{width:48px;height:48px;border-radius:14px;background:linear-gradient(145deg,var(--acc1),var(--acc2));display:grid;place-items:center;color:#fff;flex:none}
+.bn b{display:block;font-size:16px;margin-bottom:2px}
+.bn span{font-size:13px;color:var(--muted);line-height:1.3}
+.dots{display:flex;justify-content:center;gap:6px;margin:10px 0 4px}
+.dots i{width:6px;height:6px;border-radius:3px;background:#c9cdd3;transition:.25s}
+.dots i.on{width:22px;background:var(--acc1)}
+
+.h{display:flex;align-items:center;justify-content:space-between;margin:18px 4px 10px;font-size:17px;font-weight:650}
+.h a{font-size:14px;color:var(--muted);font-weight:500}
+.card{background:var(--card);border-radius:22px;padding:4px 16px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.row{display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--line);-webkit-user-select:none;user-select:none}
+.row:last-child{border-bottom:0}
+.ci{width:44px;height:44px;border-radius:50%;flex:none;overflow:hidden;display:block}
+.ci svg,.ci img{display:block;width:100%;height:100%}
+.ci.sm{width:34px;height:34px}
+.ci.hi{display:grid;place-items:center;background:var(--soft);color:#4a4f56}
+.ci.hi svg{width:22px;height:22px}
+.ci.hi.sm svg{width:18px;height:18px}
+.row .m{flex:1;min-width:0}
+.row .n{font-weight:600;font-size:16px}
+.row .p{font-size:13px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .r{text-align:right}
+.row .r .a{font-weight:600;font-size:16px}
+.row .r .u{font-size:13px;color:var(--muted);margin-top:2px}
+.up{color:var(--green)} .dn{color:var(--red)}
+.more{display:flex;align-items:center;gap:12px;padding:14px 0;color:#3a3f46;font-weight:500;width:100%}
+
+.tab{display:none;animation:fade .25s ease}
+.tab.on{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+.nav{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(12px + var(--safe-b));width:calc(100% - 24px);max-width:496px;background:rgba(255,255,255,.88);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-radius:28px;display:flex;padding:6px;box-shadow:0 8px 30px rgba(20,24,30,.14);z-index:20}
+.nav button{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 0;border-radius:22px;font-size:11.5px;color:var(--muted);font-weight:500;transition:.2s}
+.nav button.on{background:var(--soft);color:var(--text)}
+.nav svg{width:24px;height:24px}
+
+.box{background:var(--card);border-radius:22px;padding:16px 18px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.box .lab{display:flex;justify-content:space-between;color:var(--muted);font-size:14px;margin-bottom:10px;align-items:center}
+.box .lab b{color:var(--acc1);font-weight:600;cursor:pointer;margin-left:8px}
+.box .ln{display:flex;align-items:center;gap:10px}
+.pick{display:flex;align-items:center;gap:8px;background:var(--soft);padding:5px 12px 5px 5px;border-radius:30px;font-weight:650;font-size:17px;flex:none}
+.pick .ci{width:32px;height:32px}
+.pick svg.chev{width:14px;height:14px;color:var(--muted)}
+.amt{font-size:32px;font-weight:650;text-align:right;letter-spacing:-.5px}
+.amt::placeholder{color:#c3c7cd}
+.outv{font-size:32px;font-weight:650;text-align:right;width:100%;letter-spacing:-.5px;color:#9aa0a8}
+.outv.has{color:var(--text)}
+.flip{width:42px;height:42px;border-radius:50%;background:var(--card);border:4px solid var(--bg);margin:-14px auto;position:relative;z-index:2;display:grid;place-items:center;color:var(--acc1);transition:transform .3s}
+.btn{display:block;width:100%;padding:16px;border-radius:18px;background:linear-gradient(145deg,var(--acc1),var(--acc2));color:#fff;font-weight:650;font-size:17px;text-align:center;margin-top:16px;box-shadow:0 6px 16px rgba(30,34,40,.2);transition:.15s}
+.btn:active{transform:scale(.98)}
+.btn[disabled]{background:#d5d8dd;color:#9aa0a8;box-shadow:none}
+.btn.ghost{background:var(--soft);color:var(--text);box-shadow:none}
+.info{display:flex;justify-content:space-between;font-size:14px;color:var(--muted);padding:12px 6px 0}
+.info b{color:var(--text);font-weight:500}
+
+.pf{text-align:center;padding:20px 0 6px}
+.pf .ava{width:84px;height:84px;font-size:32px;margin:0 auto 12px}
+.pf h2{font-size:22px}
+.pf p{color:var(--muted);font-size:14px;margin-top:2px}
+.pbal{background:linear-gradient(145deg,#5a6068,#2b2f34);color:#fff;border-radius:24px;padding:20px;box-shadow:0 8px 22px rgba(30,34,40,.22)}
+.pbal small{opacity:.7;font-size:14px}
+.pbal .v{font-size:36px;font-weight:700;letter-spacing:-1px;margin-top:4px}
+.kv{display:flex;justify-content:space-between;align-items:center;padding:15px 0;border-bottom:1px solid var(--line);font-size:16px}
+.kv:last-child{border-bottom:0}
+.kv span{color:var(--muted)}
+.sw{width:46px;height:28px;border-radius:14px;background:#cfd3d8;position:relative;transition:.2s;flex:none}
+.sw::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.sw.on{background:var(--acc2)}
+.sw.on::after{left:21px}
+
+.ov{position:fixed;inset:0;background:rgba(20,24,30,.38);opacity:0;pointer-events:none;transition:.25s;z-index:50}
+.ov.on{opacity:1;pointer-events:auto}
+.sheet{position:fixed;left:50%;bottom:0;transform:translate(-50%,100%);width:100%;max-width:520px;max-height:86vh;overflow:auto;background:var(--bg);border-radius:28px 28px 0 0;padding:10px 16px calc(20px + var(--safe-b));transition:transform .3s cubic-bezier(.2,.8,.2,1);z-index:60}
+.sheet.on{transform:translate(-50%,0)}
+.grab{width:40px;height:5px;background:#c9cdd3;border-radius:3px;margin:0 auto 12px}
+.sheet h3{font-size:19px;text-align:center;margin-bottom:14px}
+.fld{background:var(--card);border-radius:18px;padding:12px 16px;margin-bottom:10px;display:block}
+.fld label{display:block;font-size:13px;color:var(--muted);margin-bottom:4px}
+.fld input{font-size:17px;font-weight:500}
+.fld .sel{display:flex;align-items:center;gap:10px}
+.fld .sel .ci{width:30px;height:30px}
+.addr{word-break:break-all;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px;line-height:1.45}
+.note{font-size:13px;color:var(--muted);text-align:center;margin:10px 8px 0;line-height:1.4}
+.empty{text-align:center;color:var(--muted);padding:34px 0}
+.toast{position:fixed;left:50%;top:18px;transform:translate(-50%,-90px);background:var(--acc2);color:#fff;padding:12px 20px;border-radius:16px;font-size:14.5px;font-weight:500;z-index:100;transition:.3s;max-width:90%;text-align:center}
+.toast.on{transform:translate(-50%,0)}
+.demo{display:inline-block;background:#dfe2e6;color:#5b616a;font-size:11px;font-weight:600;padding:2px 8px;border-radius:8px;margin-left:8px;vertical-align:middle}
+
+/* ===== Чёрно-серая тема: правки жёстко заданных цветов ===== */
+.nav{background:rgba(26,28,32,.92);box-shadow:0 8px 30px rgba(0,0,0,.55)}
+.act,.more{color:#c9cdd3}
+.act .ic{border:1px solid #4a4f56;box-shadow:0 6px 16px rgba(0,0,0,.45)}
+.logo{border:1px solid #3a3e45;box-shadow:none}
+.chip,.card,.box,.fld,.of{box-shadow:none}
+.bn{background:linear-gradient(135deg,#202328,#15171a);box-shadow:none}
+.dots i{background:#3a3e45}
+.dots i.on{background:var(--lnk)}
+.box .lab b,.flip{color:var(--lnk)}
+.btn{box-shadow:0 6px 16px rgba(0,0,0,.4)}
+.btn[disabled]{background:#25282d;color:#6c717a}
+.amt::placeholder{color:#4a4f56}
+.sw{background:#3a3e45}
+.sw.on{background:#8f96a0}
+.ov{background:rgba(0,0,0,.62)}
+.sheet{background:#121316}
+.grab{background:#3a3e45}
+.ci.hi{color:#c9cdd3}
+.pbal{background:linear-gradient(145deg,#31343a,#1c1e22);border:1px solid #2a2d33;box-shadow:none}
+.toast{background:#3a3e45}
+
+/* ===== Шрифты: у каждого свой участок =====
+   Unbounded     — название приложения
+   Manrope       — заголовки, крупные суммы, кнопки, названия монет
+   Onest         — основной текст и подписи
+   JetBrains Mono — цены, количество монет, адреса, ID */
+:root{
+  --f-brand:'Unbounded','Manrope',sans-serif;
+  --f-head:'Manrope','Onest',-apple-system,'Segoe UI',sans-serif;
+  --f-body:'Onest',-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',Roboto,sans-serif;
+  --f-mono:'JetBrains Mono',ui-monospace,Menlo,Consolas,monospace;
+}
+html,body{font-family:var(--f-body)}
+.brand{font-family:var(--f-brand);font-weight:600;font-size:17px;letter-spacing:-.2px}
+.bal .sum,.pbal .v,.cusd{font-family:var(--f-head);font-weight:800}
+.h,.sheet h3,.pf h2,.bn b,.btn,.pick,.act,.row .n,.cbar h2,.ranges button{font-family:var(--f-head)}
+.h,.sheet h3,.pf h2{font-weight:800}
+.row .n{font-weight:700}
+.act{font-weight:600}
+.row .p,.row .r .a,.row .r .u,.info b,.kv b,.addr,.camt,.pcard .pr span{font-family:var(--f-mono)}
+.row .p{font-size:12px}
+.row .r .a{font-size:14px;font-weight:500}
+.row .r .u{font-size:12px}
+.amt,.outv{font-family:var(--f-mono);font-weight:500;font-size:28px;letter-spacing:-.5px}
+
+/* ===== Экран монеты ===== */
+#assets .row[data-s],#meAssets .row[data-s]{cursor:pointer;transition:opacity .12s}
+#assets .row[data-s]:active,#meAssets .row[data-s]:active{opacity:.6}
+.coin{position:fixed;inset:0;z-index:40;background:var(--bg);overflow-y:auto;overscroll-behavior:contain;transform:translateX(100%);visibility:hidden;transition:transform .3s cubic-bezier(.2,.8,.2,1),visibility 0s .3s}
+.coin.on{transform:none;visibility:visible;transition:transform .3s cubic-bezier(.2,.8,.2,1),visibility 0s}
+.coin .in{max-width:520px;margin:0 auto;padding:0 16px calc(32px + var(--safe-b))}
+.cbar{display:flex;align-items:center;gap:12px;padding:calc(10px + env(safe-area-inset-top,0px)) 0 10px;position:sticky;top:0;background:var(--bg);z-index:3}
+.cbar button{width:40px;height:40px;margin-left:-8px;display:grid;place-items:center;border-radius:50%}
+.cbar h2{font-size:19px;font-weight:700}
+.chero{position:relative;height:176px;margin-top:6px}
+.chero .big,.chero .sm{position:absolute;left:50%;top:50%;border-radius:50%;overflow:hidden}
+.chero .big{width:84px;height:84px;margin:-42px 0 0 -42px}
+.chero .sm{opacity:.22;filter:saturate(.5) brightness(.8)}
+.chero img{display:block;width:100%;height:100%}
+.clab{text-align:center;font-size:17px;color:#d6d9de;margin-top:4px}
+.cusd{display:flex;justify-content:center;align-items:center;gap:10px;font-size:44px;letter-spacing:-1.2px;margin-top:6px;line-height:1.15}
+.cusd .eye{width:24px;height:24px;cursor:pointer}
+.camt{text-align:center;color:var(--muted);font-size:15px;margin-top:6px}
+.pcard{background:var(--card);border-radius:24px;padding:18px 18px 14px;margin-top:26px}
+.pcard .pr{display:flex;align-items:baseline;gap:10px}
+.pcard .pr b{font-family:var(--f-head);font-size:24px;font-weight:800;letter-spacing:-.4px}
+.pcard .pr span{font-size:13px;font-weight:500}
+.pcard .pl{color:#c9cdd3;font-size:15px;margin-top:2px;min-height:21px}
+.chart{position:relative;height:150px;margin:8px -4px 0;touch-action:pan-y;-webkit-user-select:none;user-select:none}
+.chart svg{display:block}
+.cload{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);font-size:14px}
+.ranges{display:flex;justify-content:space-between;margin:10px -6px 0}
+.ranges button{padding:9px 15px;border-radius:22px;color:var(--muted);font-size:15px;font-weight:700;box-shadow:inset 0 0 0 1.5px transparent;transition:.15s}
+.ranges button.on{background:var(--soft);color:var(--text);box-shadow:inset 0 0 0 1.5px #5b616a}
+.chh{font-family:var(--f-head);font-weight:800;font-size:18px;color:#d6d9de;margin:30px 4px 12px}
+.flt{display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.fp{position:relative;display:flex;align-items:center;gap:10px;padding:11px 16px;border-radius:24px;background:var(--card);border:1px solid var(--line);font-size:15px;color:#c9cdd3}
+.fp svg.chev{width:15px;height:15px;color:var(--muted)}
+.fp select{position:absolute;inset:0;width:100%;height:100%;opacity:0;font-size:16px;background:var(--card);color:var(--text)}
+
+/* ===== Избранное, адрес на экране монеты, QR, недавние получатели ===== */
+.fav{width:13px;height:13px;margin-left:6px;color:var(--lnk);vertical-align:-1px}
+.cbar #cFav{margin:0 -8px 0 auto;color:var(--muted)}
+.cbar #cFav.on{color:var(--lnk)}
+.cbar #cFav.on svg{fill:currentColor}
+.caddr{display:flex;align-items:center;gap:8px;margin:14px auto 0;padding:8px 14px;border-radius:12px;background:var(--card);font-size:13px;color:var(--muted);font-family:var(--f-mono)}
+.caddr svg{width:15px;height:15px;color:var(--lnk);flex:none}
+.qr{width:208px;margin:0 auto 12px;padding:10px;background:#fff;border-radius:12px}
+.qr svg{display:block;width:100%;height:auto}
+.rct{font-size:13px;color:var(--muted);margin:0 4px 6px}
+.rcl{display:flex;gap:8px;overflow-x:auto;margin:0 0 10px;scrollbar-width:none}
+.rcl::-webkit-scrollbar{display:none}
+.rcp{flex:none;display:flex;align-items:center;gap:8px;padding:6px 12px 6px 6px;border-radius:30px;background:var(--card);border:1px solid var(--line);font-size:14px;font-family:var(--f-mono)}
+.rcp i{font-style:normal;width:24px;height:24px;border-radius:50%;background:var(--soft);display:grid;place-items:center;font-size:12px;font-family:var(--f-body);font-weight:600}
+.toast.in{box-shadow:inset 4px 0 0 var(--green)}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top">
+    <div class="brand">
+      <div class="logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"><path d="M12 2.5 20.5 7.5v9L12 21.5 3.5 16.5v-9z"/><path d="M15.5 9.8c-.6-.9-1.6-1.4-2.8-1.4-2 0-3.4 1.5-3.4 3.6s1.4 3.6 3.4 3.6c1.2 0 2.2-.5 2.8-1.4" stroke-linecap="round"/></svg></div>
+      <span id="brandName"></span>
+    </div>
+    <div class="chip" id="chip"><div class="ava" id="chipAva">C</div><span id="chipName">Гость</span></div>
+  </div>
+
+  <!-- WALLET -->
+  <section class="tab on" id="t-wallet">
+    <div class="bal">
+      <div class="sum" id="sum"></div>
+      <div class="sub" data-t="balLabel"></div>
+      <div class="actions">
+        <button class="act" onclick="openReceive()"><div class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7 7 17M7 8v9h9"/></svg></div><span data-t="actReceive"></span></button>
+        <button class="act" onclick="openSend()"><div class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></div><span data-t="actSend"></span></button>
+        <button class="act" onclick="openHistory()"><div class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><span data-t="actHistory"></span></button>
+      </div>
+    </div>
+    <div class="banners" id="banners">
+      <div class="bn"><div class="bi"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12v9H4v-9M2 7h20v5H2zM12 22V7M12 7H7.5a2.5 2.5 0 1 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 1 0 0-5C13 2 12 7 12 7z"/></svg></div><div><b data-t="bn1t"></b><span data-t="bn1s"></span></div></div>
+      <div class="bn"><div class="bi"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10h13l-4-4M17 14H4l4 4"/></svg></div><div><b data-t="bn2t"></b><span data-t="bn2s"></span></div></div>
+      <div class="bn"><div class="bi"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/><path d="m9 12 2 2 4-4"/></svg></div><div><b data-t="bn3t"></b><span data-t="bn3s"></span></div></div>
+    </div>
+    <div class="dots" id="dots"><i class="on"></i><i></i><i></i></div>
+    <div class="h"><span data-t="myAssets"></span><a id="updated"></a></div>
+    <div class="card" id="assets"></div>
+  </section>
+
+  <!-- SWAP -->
+  <section class="tab" id="t-swap">
+    <div class="h" style="margin-top:14px"><span data-t="swapTitle"></span></div>
+    <div class="box">
+      <div class="lab"><span data-t="youSend"></span><span id="fromBal"></span></div>
+      <div class="ln">
+        <button class="pick" id="fromPick"></button>
+        <input class="amt" id="amt" type="text" inputmode="decimal" placeholder="0" autocomplete="off">
+      </div>
+    </div>
+    <button class="flip" id="flip"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4v16M4 8l4-4 4 4M16 20V4M12 16l4 4 4-4"/></svg></button>
+    <div class="box">
+      <div class="lab"><span data-t="youGet"></span><span id="toBal"></span></div>
+      <div class="ln">
+        <button class="pick" id="toPick"></button>
+        <div class="outv" id="outv">0</div>
+      </div>
+    </div>
+    <div class="info"><span data-t="rateLabel"></span><b id="rate">—</b></div>
+    <div class="info"><span data-t="feeLabel"></span><b data-t="fee"></b></div>
+    <button class="btn" id="swapGo" disabled>Продолжить</button>
+    <div class="h"><span data-t="lastSwaps"></span></div>
+    <div class="card" id="swapHist"></div>
+  </section>
+
+  <!-- PROFILE -->
+  <section class="tab" id="t-me">
+    <div class="pf">
+      <div class="ava" id="meAva">C</div>
+      <h2 id="meName">Гость</h2>
+      <p id="meUser"></p>
+    </div>
+    <div class="pbal">
+      <small><span data-t="accBal"></span></small>
+      <div class="v" id="meBal"></div>
+    </div>
+    <div class="h"><span data-t="assets"></span></div>
+    <div class="card" id="meAssets"></div>
+    <div class="h"><span data-t="histOps"></span></div>
+    <div class="card" id="meHist"></div>
+    <div class="h"><span data-t="accInfo"></span></div>
+    <div class="card">
+      <div class="kv"><span data-t="idLabel"></span><b id="meId" style="font-weight:500"></b></div>
+      <div class="kv"><span data-t="addrLabel"></span><b id="meAddr" style="font-weight:500;cursor:pointer"></b></div>
+      <div class="kv"><span data-t="regLabel"></span><b id="meReg" style="font-weight:500"></b></div>
+      <div class="kv"><span data-t="currLabel"></span><b style="font-weight:500" data-t="currency"></b></div>
+    </div>
+    <div class="h"><span data-t="settings"></span></div>
+    <div class="card">
+      <div class="kv"><div data-t="hideBal"></div><div class="sw" id="swHide"></div></div>
+      <div class="kv"><div data-t="notifs"></div><div class="sw on" id="swNotif"></div></div>
+      <button class="kv" style="width:100%" id="resetBtn"><div style="color:var(--red)" data-t="reset"></div></button>
+    </div>
+    <p class="note" id="profileNote"></p>
+  </section>
+</div>
+
+<nav class="nav" id="nav">
+  <button class="on" data-t="wallet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7H5a2 2 0 0 1 0-4h12v4"/><path d="M3 5v14a2 2 0 0 0 2 2h15V7"/><circle cx="16.5" cy="14" r="1.2" fill="currentColor"/></svg><span data-t="navWallet"></span></button>
+  <button data-t="swap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10h13l-4-4M17 14H4l4 4"/></svg><span data-t="navSwap"></span></button>
+  <button data-t="me"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg><span data-t="navMe"></span></button>
+</nav>
+
+<div class="coin" id="coin"></div>
+<div class="ov" id="ov"></div>
+<div class="sheet" id="sheet"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ===== НАЗВАНИЕ ПРИЛОЖЕНИЯ — меняется только здесь ===== */
+const APP_NAME = 'Cryptonium';
+
+/* ===== ТЕКСТЫ — меняются только здесь =====
+   Здесь все надписи приложения. В {фигурных скобках} — подстановки, их не трогайте. */
+const TEXTS = {
+
+  // --- Название вкладок и кнопок ---
+  actReceive: "Получить",
+  actSend: "Отправить",
+  actHistory: "История",
+  navWallet: "Кошелёк",
+  navSwap: "Обмен",
+  navMe: "Аккаунт",
+  balLabel: "Общий баланс в USD",
+  myAssets: "Мои активы",
+
+  // --- Баннеры на главной ---
+  bn1t: "Добро пожаловать",
+  bn1s: "Хранение, обмен и переводы в одном месте",
+  bn2t: "Обмен без комиссии",
+  bn2s: "Меняйте активы по рыночному курсу",
+  bn3t: "Всё под рукой",
+  bn3s: "Баланс и история — во вкладке «Аккаунт»",
+
+  // --- Вкладка «Обмен» ---
+  swapTitle: "Обмен",
+  youSend: "Вы отправляете",
+  youGet: "Вы получаете",
+  rateLabel: "Курс",
+  feeLabel: "Комиссия",
+  fee: "0%",
+  lastSwaps: "Последние обмены",
+  doSwap: "Обменять",
+  needAmt: "Введите сумму",
+  noSym: "Недостаточно {sym}",
+  noSwaps: "Обменов пока нет",
+  rateText: "1 {from} ≈ {n} {to}",
+  swapHistTitle: "{f} на {t}",
+  gotSwap: "Получено {amount} {sym}",
+
+  // --- Вкладка «Аккаунт» ---
+  accBal: "Баланс аккаунта",
+  assets: "Активы",
+  histOps: "История операций",
+  accInfo: "Информация об аккаунте",
+  idLabel: "ID",
+  addrLabel: "Адрес",
+  regLabel: "Дата регистрации",
+  currLabel: "Валюта",
+  currency: "USD",
+  settings: "Настройки",
+  hideBal: "Скрывать баланс",
+  notifs: "Уведомления",
+  reset: "Сбросить данные",
+  confirmReset: "Сбросить балансы и историю?",
+  resetDone: "Данные сброшены",
+  noAssets: "Активов пока нет",
+  guest: "Гость",
+  profileNote: "Балансы и переводы без коммисии только внутри {app}.",
+
+  // --- Получение переводов (уведомление) ---
+  received: "Получено {amount}",
+  receivedFrom: "Получено {amount} от {from}",
+  receivedMany: "Новых переводов: {n}",
+
+  // --- Список активов и избранное ---
+  showAll: "Показать все ({n})",
+  showLess: "Показать меньше",
+  favAdded: "Добавлено в избранное",
+  favRemoved: "Убрано из избранного",
+  favTitle: "Избранное",
+  updated: "обновлено {time}",
+  offline: "курсы: офлайн",
+  bonusToast: "Бонус: +1000 GRAM и +1000 USDT",
+  bonusTitle: "Бонус",
+
+  // --- Экран «Получить» и «Отправить» ---
+  addrIn: "Ваш адрес в {app}",
+  orUser: "Или по юзернейму",
+  copyAddr: "Скопировать адрес",
+  receiveNote: "Адрес работает только внутри {app}: переводы приходят на баланс в приложении. Не отправляйте на него средства из других кошельков.",
+  pickAsset: "Выберите актив",
+  assetAvail: "Актив · доступно",
+  recipient: "Получатель",
+  recipientPh: "Адрес, @username или ID",
+  amount: "Сумма",
+  max: "МАКС",
+  recents: "Недавние получатели",
+  needTo: "Укажите получателя",
+  noFunds: "Недостаточно средств",
+  noRecipient: "Получатель не найден. Для переводов между пользователями нужен сервер приложения",
+  sendHist: "Отправка {sym}",
+  recvHist: "Получено {sym}",
+  toSelf: "себе",
+  fromSelf: "от себя",
+  sent: "Отправлено {amount} {sym}",
+  sendNote: "Перевод проводится без коммисии только внутри приложения",
+  copied: "Скопировано",
+  copyFail: "Не удалось скопировать",
+  srvErr: "Ошибка сервера",
+  noOps: "Операций пока нет",
+
+  // --- Экран монеты ---
+  back: "Назад",
+  yourBal: "Ваш {name} баланс",
+  pricePer: "Цена за 1 {sym}",
+  txHist: "История транзакций",
+  loading: "Загрузка…",
+  fType: "Тип операции",
+  fAllOps: "Все операции",
+  fIn: "Получено",
+  fOut: "Отправлено",
+  fSwap: "Обмен",
+  fBonus: "Бонусы",
+  fPer: "Период",
+  fAllTime: "Всё время",
+  fDay: "Сегодня",
+  fWeek: "7 дней",
+  fMonth: "30 дней",
+  rng_d1: "1Д",
+  rng_d7: "7Д",
+  rng_m1: "1М",
+  rng_y1: "1Г",
+  rng_max: "МАКС",
+
+  // --- Формат дат ---
+  locale: "ru-RU",
+};
+const tr = (k, v) => String(TEXTS[k] !== undefined ? TEXTS[k] : k).replace(/\{(\w+)\}/g, (m, n) => { const d = Object.assign({ app: APP_NAME }, v); return n in d ? d[n] : m; });
+document.querySelectorAll('[data-t]').forEach(el => el.textContent = tr(el.dataset.t));
+
+/* ---------- Telegram ---------- */
+const tg = window.Telegram && window.Telegram.WebApp;
+if (tg) {
+  try {
+    tg.ready(); tg.expand();
+    tg.setHeaderColor('#0d0e10'); tg.setBackgroundColor('#0d0e10');
+    if (tg.setBottomBarColor) tg.setBottomBarColor('#1a1c20');
+  } catch (e) {}
+}
+const hap = (t) => { try { tg && tg.HapticFeedback && tg.HapticFeedback.impactOccurred(t || 'light'); } catch (e) {} };
+const hapOk = () => { try { tg && tg.HapticFeedback && tg.HapticFeedback.notificationOccurred('success'); } catch (e) {} };
+const tgUser = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) || null;
+
+/* ---------- Сервер (необязателен) ---------- */
+const API = ''; // если index.html лежит отдельно от server.py, впишите адрес сервера, например 'https://example.com'
+let srv = false; // true, когда сервер ответил
+async function api(path, body) {
+  const init = (tg && tg.initData) || ('dev:' + S.fid + ':' + (tgUser ? tgUser.first_name : 'Guest'));
+  const r = await fetch(API + '/api/' + path, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(Object.assign({ init }, body || {})),
+    signal: (window.AbortSignal && AbortSignal.timeout) ? AbortSignal.timeout(8000) : undefined,
+  });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(j.error || tr('srvErr'));
+  return j;
+}
+
+/* ---------- Иконки монет (SVG) ---------- */
+const IMG = {"USDT": "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", "GRAM": "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", "SOL": "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", "TRX": "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", "BTC": "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", "ETH": "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", "DOGE": "UklGRnQKAABXRUJQVlA4WAoAAAAQAAAAXwAAXwAAQUxQSJQCAAABCjm2bauN9L8kV82gOaIhVMyVNnen3EOo8iga8uqcMgyZmWkCzBAK/lpllm5DeO9/EQFBkty4DReoJSH4thNcL+CoSDKR5IqZ9uFb99+GSqIs3jrcnlnR+7SahE/lyHVbj9/6HIbA51vR1nUMqW9u50hbuPg7SKoKK1l1L5Y063oOv+NCx5D6pnZx/szPIBW5VRoCtGiSfp6ZTxvZRHJs/9Mg9b025CVJT/ePOaY1WxPX2v88qOq1jGag9Dy2XOLrtc7fCSpK1QSadGe+RqPP3JoTvbs6NyfWuKweY0LufhtKqmaQst2OSS1u2dGgXA0gSpbV4GXcdGPArWq+0Y1NLhtZJ772WpsxfuWIYtz9raNNinEkMR6SSjUKSoecjaRFwyrRRhDjThWVGgdNcUhJOPGtZAAAaRMuGUb9egsQKlG23g8Wn8Y7oRAITHdi5GCno8oFgygb6JNyZ0eRZCfTAU4rPlUl0mL1KfqkP5/udcLxiX0pcrKjaMI+4pPxB902LJONJ76X93QYj/Yw9vKbDuPRm2Xqy8Dks1cdRiTLfBfPdhRTZjsUeQHzLJkuMNK71T8rYi4yrna+5RaVCxRRi2yl7jLqWTLRxeWzKtRFLR+5ucO4tJlcwr0iRS0xuxdK3EXds5Vfca9IVLSpElglllNtZE/J1D6Gvngb2VOi4h30ZW+F7SITPIiv8Pj/OeDfEf7vGv/vEv7fVfz/C/j/1/D/L+PHFfBx0R8Q1+HHpfhxNX5egJ/XwOdl+Hklel78B+T1+HUJ+LoKfl0Ivq4FX5fDryvC10Xh67r4dWn4ujp8XwC+rwHfl4HvK8H3xeD7evB9Sfi+KnxfGL6vjd6Xh58rQJ+LgJ/rQJ9L+ZPnauDngghWUDggugcAABAkAJ0BKmAAYAA+KRCGQiGhC1TPnAwBQlmAJ05wNReT/278ufaasL9t/DvJE0z54PLX+//r343dt7zCP1P/1/Vh8w3RM9AD+nf6DrnfQg8t/9kvh4/cX0HaPx+X/NcaRfuP69xeyxWEHBReN+ZU0bKhv6v75WnYAWr9tcYa1aCu/2TpoKC5Fn0T4CfhGxCyaCXReH9QFL6DC18CGph/W9lX9/CZfyEBA9Ml9ihR2SrJ9snUC7wCC5SkuI/RhUvdyCw7vDDOr9mReyPVFBkNTOLV5/tehhFwA/m8EmeNjbk7cBkv6zFxvWRHpxgTjAAPQOfvSN7DuN9afbrNLEZ2qo9zs3uxMOW6flAVnSjB1idZV82u/HpWZZmfm/EZthfdbx5ZhV302I+0AAD+/98dz//w7pcmGtp6CzF3UPt5die1DGvYB9If59aIJzD74aRNXeLfRkzPO4hZp9+VZ1wR/XmD9MB57+48PFtfok8PIvCUOCxBYqsWvtZ/r+STgtYlgmxR18tuUtgdlSCA/+7Rx9/kIDM4d9l1sL8Sd3HfkqucUO3mllsq3n/5FscYcTWA7aEF3Bi43XNfIPzYjWbspcGI9iSQA+fLf4GPs1R/roTRuq0fc5L8g1dT18imutM05lxvWlIMB31yTaxhenpNKzuJ/uyADmQDfHd5e2d9Q2TMMMUKlwAfFE/VgC6OKC3bzGerQoYEcbGMbEys1o8L7fihn5f7P39kSwQDdZgGT+X1PwItGd/rEP/fzsX/5W76VzroG9LANX4L+Fj6aKzmp4vtfw+yjdE3tcWZXHVbP3RjXS4aNRmo6+EmXxOfeQ1iK4vq8nd/c5WrAbazijtPS2PPqpEG72Lw0Og16+u8HTNs7FyL+HiY4G0B0jX5UhqC6CtNzLthrbbF3POlRJNMyPFB1DK2xWIdgTxWNW48QxfhUXDFFT1xy62ymZpRKpIsWm1wy6owGQtSDMeg/hYaZxnwC7IXs0lJ1jS9hyd3CoKwic8Wrqik1Q8Bm4Ak/qdAPioSn5fS6I2QVQap7ia8QyZ5nFbPVSR6hlWCey4AvyayFiVw8HHXp2xtgKSCZw75wd8Q3JOlRmEEeD7PfyhADtuU5+5my5G8inCO9T2Lv8rDyVctcfYBrFAjKE35gEU8W4oxeNTPlhSlPWNa+xbkeUP2h+PVmMbZ7uoG8B/HpYmehQOunzWSrJJlF+BgkLIyBNqPieeQWCXc3yNkAzV5w6XxyPtPYqz59ot+hYtkWMgdT7Y+1PQW4ZzTdEMJt0d7igq79u4Lke8n4IWRidEw40GyX77xiV/7eFBT72K1mZCj43Z2znxPw7nO1/m3+sP+20u0Vd9jWk+0C0l7ehWE4fG3dmfTeqRzweBJxUrRH5WAbetoYUdaWA47KGdL4zaWUYGXnb9bmrR7nIrtL2Tv4kHR/hr00/o/8F8bzJP8myKgc9bx7+TR7/6uP3Ext8J/sGNDg3ktFD2GPgtjIo1CoF12F+qF2++Ds873SHnXf0xtEPamF7lwTaYT+ser/4ulQQedvWdFI0vBct+AktmWwn1GnotYHRftWUB2JNUDdkvFBE5Fv7IWs7eHtR7ZGR9rjlWA2xvPHCHDBSsRARLnNNvV3MMcSXZlcR46uBV49W7YmXwoN7pk9t/257w3fnh3sbaQUPqfGoFo3Y2/MJXF5dvD3Vcb5caltbRK2T4yTq8L7n3eIy14PO98NjYkg6OytUboyIHlBaOUVZPSaflNJEfVRuLfw0W6SdKX2wZYrBl8O9mppQbRs/1Mcj+g2TZ+GKX0xH+od++slOyoHaB1pP98MP94x+VrSX02WilWUA1RSa/OHbOo8JeAnaHmC+Z4X+C1zFij9+0fMk4lppxvZS8sR8KJRlgLruK4d2ELDqewkwS41GkKD/qwaoFLLxi3oBQjTZxWX8HOQgZ64WFjhwsyZdwPBMUBtlRwekIQyypqgH63xBUKb0bJCK/I3ToI4daRweV+TUE84ETZs351kve9UVlMhqUFS/mzlX//wCC9uWBties6VecgDCEuTMhYJK1+8qfC+xpbWujE/CjBBCv/kk/+WpJgmMTLg3GKRuF4lxEIz43OUdwmvl5j6Cdg852nVS6z1ud6Yk5NCzKz75+gz06PCXoqkwKy7RLZk2W+OkMK22HeQCXqHirOfvp5P6L4sKt7RWvAS+WBFJzgCuVASabZdLCqZhsV3WHIj93d/ml2Ct59F+Ypq7B+dBMhVxNV4h67APvbxa3NV+Fqg1cIVmsoirWgp4rWWNI2fjhgOSz4nNz4z+t5GCn/W8gTtZ9K4IRiHWo9bgI0zGKI/zcG48xAOcf/y/fuiL3IABKmTCISqPDvIRAUYBL78cqTgWYxf/y/jlUMc70OMyaIBjUuQTvKHR42E6KWoN+6J8flVUkHjdkoG2VsOJ5cVyKphDpm+Qg/FMcZTUaCykPWfsM7zD+tze3Z+/hpoOWHLVIyuA5BGxLjvTE3EGyiNe9odywzA5RplDbKd6XLlSUrMosAjoMydnOEYziXP5nC1lhOiqRCbpVDTdb8MLlNtiEyRjm0oB7A6+O7SeZoYqGSU1x8ZoJ0Xh1xbxqOdG+dXk1xcwPmH2JZo0TgQ4sSopKM/TH2UoOhYXe4AAA=", "LTC": "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", "BNB": "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", "USDC": "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", "XAUT": "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"};
+const icon = (c, sm) => `<div class="ci ${sm ? 'sm' : ''}"><img src="data:image/webp;base64,${IMG[c.s]}" alt="${c.s}"></div>`;
+
+/* иконки операций */
+const HI = {
+  in:    '<path d="M17 7 7 17M7 8v9h9"/>',
+  out:   '<path d="M7 17 17 7M8 7h9v9"/>',
+  swap:  '<path d="M7 10h13l-4-4M17 14H4l4 4"/>',
+  bonus: '<path d="M20 12v9H4v-9M2 7h20v5H2zM12 22V7M12 7H7.5a2.5 2.5 0 1 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 1 0 0-5C13 2 12 7 12 7z"/>',
+  down:  '<path d="m6 9 6 6 6-6"/>',
+  up:    '<path d="m6 15 6-6 6 6"/>',
+};
+const hico = (t, sm) => `<div class="ci hi ${sm ? 'sm' : ''}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">${HI[t]}</svg></div>`;
+const CHEV = '<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>';
+
+/* ---------- Данные ---------- */
+const COINS = [
+  { s: 'USDT', n: 'Tether',       p: 0.999,    ch: -0.01, id: 'tether' },
+  { s: 'GRAM', n: 'Gram',         p: 1.02,     ch: -0.78, id: null },
+  { s: 'SOL',  n: 'Solana',       p: 73.33,    ch: 2.45,  id: 'solana' },
+  { s: 'TRX',  n: 'TRON',         p: 0.3056,   ch: 0.24,  id: 'tron' },
+  { s: 'BTC',  n: 'Bitcoin',      p: 64829.55, ch: 0.37,  id: 'bitcoin' },
+  { s: 'ETH',  n: 'Ethereum',     p: 1817.09,  ch: 0.50,  id: 'ethereum' },
+  { s: 'DOGE', n: 'Dogecoin',     p: 0.05854,  ch: -0.44, id: 'dogecoin' },
+  { s: 'LTC',  n: 'Litecoin',     p: 45,       ch: 0.90,  id: 'litecoin' },
+  { s: 'BNB',  n: 'Binance Coin', p: 592.95,   ch: 0.35,  id: 'binancecoin' },
+  { s: 'USDC', n: 'USD Coin',     p: 0.9996,   ch: 0,     id: 'usd-coin' },
+  { s: 'XAUT', n: 'Tether Gold',  p: 3846.09,  ch: -0.28, id: 'tether-gold' },
+];
+const C = Object.fromEntries(COINS.map(c => [c.s, c]));
+
+/* у каждого пользователя Telegram свой кошелёк: ключ хранилища зависит от его ID */
+const KEY = tgUser ? 'cryptonium_v2_u' + tgUser.id : 'cryptonium_v2';
+try { /* старые данные с этого устройства достаются только первому, кто зашёл */
+  if (tgUser && !localStorage.getItem(KEY) && localStorage.getItem('cryptonium_v2') && !localStorage.getItem('cryptonium_v2_owner')) {
+    localStorage.setItem(KEY, localStorage.getItem('cryptonium_v2'));
+    localStorage.setItem('cryptonium_v2_owner', String(tgUser.id));
+  }
+} catch (e) {}
+function localAddr(seed) {
+  let x = 7;
+  for (const ch of 'cryptonium:' + seed) x = (x * 31 + ch.charCodeAt(0)) >>> 0;
+  let out = '';
+  for (let i = 0; i < 20; i++) { x = (Math.imul(x, 1664525) + 1013904223) >>> 0; out += '0123456789ABCDEF'[x % 16]; }
+  return 'CRY' + out;
+}
+function freshState() {
+  const bal = {}; COINS.forEach(c => bal[c.s] = 0);
+  const fid = String(10000000 + Math.floor(Math.random() * 89999999));
+  return { bal, hist: [], hide: false, notif: true, reg: Date.now(), fid, addr: localAddr(fid), fav: [], recent: [] };
+}
+let S;
+try { S = JSON.parse(localStorage.getItem(KEY)) || freshState(); } catch (e) { S = freshState(); }
+S.bal = S.bal || {}; S.hist = S.hist || []; S.fav = S.fav || []; S.recent = S.recent || [];
+if (!S.addr) S.addr = localAddr(S.fid);
+COINS.forEach(c => { if (typeof S.bal[c.s] !== 'number') S.bal[c.s] = 0; });
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} };
+
+/* ---------- Утилиты ---------- */
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s).replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
+const fmtAmt = (v, d = 6) => (v === 0 ? '0' : v.toFixed(d).replace(/\.?0+$/, ''));
+function fmtUsd(v) {
+  if (v === 0) return '0.00';
+  if (v < 1) return v.toFixed(4);
+  return v.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+const fmtPrice = (p) => p >= 1 ? p.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : p.toFixed(p < 0.1 ? 5 : 4);
+const fmtDate = (t) => new Date(t).toLocaleString(tr('locale'), { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+const total = () => COINS.reduce((a, c) => a + (S.bal[c.s] || 0) * c.p, 0);
+function copyText(t) {
+  (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(() => toast(tr('copied')), () => toast(tr('copyFail')));
+  hap();
+}
+function isSelf(t) {
+  const x = String(t).trim().toLowerCase();
+  return x === S.addr.toLowerCase() || x === String(S.fid) ||
+    !!(tgUser && (x === String(tgUser.id) || (tgUser.username && x === '@' + tgUser.username.toLowerCase())));
+}
+let toastT;
+function toast(msg, ms, cls) {
+  const t = $('toast'); t.textContent = msg; t.className = 'toast on' + (cls ? ' ' + cls : '');
+  clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('on'), ms || 2400);
+}
+/* входящий перевод: всплывающее сообщение + вибрация (если «Уведомления» включены) */
+function notifyIn(list) {
+  if (!S.notif) return;
+  const h = list[0], amt = h.amount.replace('+', '');
+  toast(list.length > 1 ? tr('receivedMany', { n: list.length }) : h.sub ? tr('receivedFrom', { amount: amt, from: h.sub }) : tr('received', { amount: amt }), 5000, 'in');
+  hapOk(); try { navigator.vibrate && navigator.vibrate([90, 60, 90]); } catch (e) {}
+}
+function addHist(type, title, amount, sub) {
+  S.hist.unshift({ type, title, amount, sub: sub || '', t: Date.now() });
+  S.hist = S.hist.slice(0, 200); save();
+}
+function histRow(h) {
+  const pos = h.amount.startsWith('+');
+  return `<div class="row">${hico(h.type)}
+    <div class="m"><div class="n">${esc(h.title)}</div><div class="p">${fmtDate(h.t)}${h.sub ? ' · ' + esc(h.sub) : ''}</div></div>
+    <div class="r"><div class="a ${pos ? 'up' : ''}">${S.hide ? '••••' : esc(h.amount)}</div></div></div>`;
+}
+function assetRow(c) {
+  const b = S.bal[c.s] || 0;
+  const chc = c.ch > 0 ? 'up' : c.ch < 0 ? 'dn' : '';
+  const chs = c.ch ? `${c.ch > 0 ? '+' : ''}${c.ch.toFixed(2)}%` : '';
+  return `<div class="row" data-s="${c.s}">${icon(c)}
+    <div class="m"><div class="n">${c.n}${S.fav.includes(c.s) ? STAR : ''}</div><div class="p">$${fmtPrice(c.p)} <span class="${chc}">${chs}</span></div></div>
+    <div class="r"><div class="a">${S.hide ? '••••' : fmtAmt(b)} ${c.s}</div><div class="u">${S.hide ? '••••' : '$' + fmtUsd(b * c.p)}</div></div></div>`;
+}
+
+/* ---------- Кошелёк ---------- */
+let showAll = false;
+const EYE_ON = '<svg class="eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>';
+const EYE_OFF = '<svg class="eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3l18 18M10.6 5.1A9.9 9.9 0 0 1 12 5c6.4 0 10 7 10 7a17 17 0 0 1-3.2 4M6.7 6.7C3.9 8.4 2 12 2 12s3.6 7 10 7c1.7 0 3.2-.4 4.5-1M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>';
+
+function renderWallet() {
+  const tv = total();
+  $('sum').innerHTML = S.hide
+    ? `<small>$</small>••••<span id="eyeBtn">${EYE_OFF}</span>`
+    : `<small>$</small>${fmtUsd(tv)}<span id="eyeBtn">${EYE_ON}</span>`;
+  $('eyeBtn').onclick = () => { S.hide = !S.hide; save(); hap(); renderAll(); };
+
+  const fv = (s) => S.fav.includes(s) ? 1 : 0;
+  const sorted = [...COINS].sort((a, b) => fv(b.s) - fv(a.s) || (S.bal[b.s] * b.p) - (S.bal[a.s] * a.p) || COINS.indexOf(a) - COINS.indexOf(b));
+  const list = showAll ? sorted : sorted.slice(0, Math.max(3, S.fav.length));
+  $('assets').innerHTML = list.map(assetRow).join('') +
+    `<button class="more" id="moreBtn">${hico(showAll ? 'up' : 'down', 1)}${showAll ? tr('showLess') : tr('showAll', { n: COINS.length })}</button>`;
+  $('moreBtn').onclick = () => { showAll = !showAll; hap(); renderWallet(); };
+}
+
+/* секрет: 3 нажатия на Tether Gold */
+const STARP = '<path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.5 2.9 1-6.1L3.1 9.5l6.1-.9z"/>';
+const STAR = '<svg class="fav" viewBox="0 0 24 24" fill="currentColor">' + STARP + '</svg>';
+function toggleFav(s) {
+  const i = S.fav.indexOf(s); if (i < 0) S.fav.push(s); else S.fav.splice(i, 1);
+  hap(); toast(tr(i < 0 ? 'favAdded' : 'favRemoved')); renderAll();
+}
+/* долгое нажатие на актив в списке — в избранное и обратно */
+let lp, lpDone = false;
+$('assets').addEventListener('pointerdown', (e) => {
+  const r = e.target.closest('.row[data-s]'); if (!r) return;
+  lpDone = false; lp = setTimeout(() => { lpDone = true; toggleFav(r.dataset.s); }, 550);
+});
+['pointerup', 'pointermove', 'pointercancel', 'pointerleave'].forEach(ev => $('assets').addEventListener(ev, () => clearTimeout(lp)));
+$('assets').addEventListener('contextmenu', (e) => e.preventDefault());
+let tapN = 0, tapT;
+$('assets').addEventListener('click', (e) => {
+  if (lpDone) { lpDone = false; return; }
+  const r = e.target.closest('.row[data-s]'); if (!r) return;
+  if (r.dataset.s !== 'XAUT') { tapN = 0; hap(); openCoin(r.dataset.s); return; }
+  tapN++; clearTimeout(tapT); tapT = setTimeout(() => tapN = 0, 1500); hap();
+  if (tapN >= 3) {
+    tapN = 0;
+    if (srv) { api('bonus').then(j => { applyState(j); hapOk(); toast(tr('bonusToast')); }).catch(e => toast(e.message)); return; }
+    S.bal.GRAM += 1000; S.bal.USDT += 1000;
+    addHist('bonus', tr('bonusTitle'), '+1000 GRAM');
+    addHist('bonus', tr('bonusTitle'), '+1000 USDT');
+    hapOk(); renderAll(); toast(tr('bonusToast'));
+  }
+});
+
+/* ---------- Баннеры ---------- */
+const bn = $('banners');
+bn.addEventListener('scroll', () => {
+  const i = Math.round(bn.scrollLeft / (bn.clientWidth - 22));
+  [...$('dots').children].forEach((d, k) => d.classList.toggle('on', k === i));
+}, { passive: true });
+setInterval(() => {
+  const w = bn.clientWidth - 22; const i = Math.round(bn.scrollLeft / w);
+  bn.scrollTo({ left: ((i + 1) % 3) * w, behavior: 'smooth' });
+}, 5000);
+
+/* ---------- Sheet ---------- */
+function openSheet(title, html, mount) {
+  $('sheet').innerHTML = `<div class="grab"></div><h3>${title}</h3>${html}`;
+  $('ov').classList.add('on'); $('sheet').classList.add('on');
+  $('sheet').scrollTop = 0;
+  mount && mount();
+}
+function closeSheet() { $('ov').classList.remove('on'); $('sheet').classList.remove('on'); }
+$('ov').onclick = closeSheet;
+
+function pickCoin(title, cb) {
+  const html = '<div class="card">' + COINS.map(c =>
+    `<button class="row" style="width:100%;text-align:left" data-s="${c.s}">${icon(c)}
+      <div class="m"><div class="n">${c.n}</div><div class="p">${c.s}</div></div>
+      <div class="r"><div class="a">${fmtAmt(S.bal[c.s] || 0)}</div><div class="u">$${fmtUsd((S.bal[c.s] || 0) * c.p)}</div></div></button>`).join('') + '</div>';
+  openSheet(title, html, () => {
+    $('sheet').querySelectorAll('[data-s]').forEach(b => b.onclick = () => { hap(); closeSheet(); cb(b.dataset.s); });
+  });
+}
+
+/* ---------- QR-код (встроенный генератор, версии 1–6, уровень M) ---------- */
+function qrSvg(text) {
+  const EC = [0, 10, 16, 26, 18, 24, 16], NB = [0, 1, 1, 1, 2, 2, 4], RAW = [0, 26, 44, 70, 100, 134, 172];
+  const exp = [], log = [];
+  for (let i = 0, x = 1; i < 255; i++) { exp[i] = x; log[x] = i; x <<= 1; if (x > 255) x ^= 285; }
+  for (let i = 255; i < 512; i++) exp[i] = exp[i - 255];
+  const mul = (a, b) => a && b ? exp[log[a] + log[b]] : 0;
+  const bytes = [...new TextEncoder().encode(text)];
+  let v = 1; while (v <= 6 && bytes.length > RAW[v] - EC[v] * NB[v] - 2) v++;
+  if (v > 6) return '';
+  const nd = RAW[v] - EC[v] * NB[v], bits = [];
+  const put = (val, n) => { for (let i = n - 1; i >= 0; i--) bits.push((val >>> i) & 1); };
+  put(4, 4); put(bytes.length, 8); bytes.forEach(b => put(b, 8));
+  put(0, Math.min(4, nd * 8 - bits.length)); while (bits.length % 8) bits.push(0);
+  for (let p = 0xEC; bits.length < nd * 8; p ^= 0xEC ^ 0x11) put(p, 8);
+  const data = []; for (let i = 0; i < bits.length; i += 8) data.push(parseInt(bits.slice(i, i + 8).join(''), 2));
+  const el = EC[v]; let g = [1];
+  for (let i = 0; i < el; i++) { const nn = new Array(g.length + 1).fill(0); g.forEach((c, j) => { nn[j] ^= c; nn[j + 1] ^= mul(c, exp[i]); }); g = nn; }
+  const nS = NB[v] - RAW[v] % NB[v], sl = Math.floor(RAW[v] / NB[v]), blocks = []; let k = 0;
+  for (let i = 0; i < NB[v]; i++) {
+    const d = data.slice(k, k += sl - el + (i < nS ? 0 : 1)), r = new Array(el).fill(0);
+    d.forEach(b => { const f = b ^ r.shift(); r.push(0); for (let j = 0; j < el; j++) r[j] ^= mul(g[j + 1], f); });
+    if (i < nS) d.push(0);
+    blocks.push(d.concat(r));
+  }
+  const cw = [];
+  for (let i = 0; i < blocks[0].length; i++) blocks.forEach((b, j) => { if (i !== sl - el || j >= nS) cw.push(b[i]); });
+  const n = 17 + 4 * v, F = []; let M = [];
+  for (let i = 0; i < n; i++) { M.push(new Array(n).fill(0)); F.push(new Array(n).fill(0)); }
+  const set = (x, y, d) => { M[y][x] = d ? 1 : 0; F[y][x] = 1; };
+  for (let i = 0; i < n; i++) { set(6, i, i % 2 === 0); set(i, 6, i % 2 === 0); }
+  const finder = (cx, cy) => { for (let dy = -4; dy <= 4; dy++) for (let dx = -4; dx <= 4; dx++) { const x = cx + dx, y = cy + dy, d = Math.max(Math.abs(dx), Math.abs(dy)); if (x >= 0 && x < n && y >= 0 && y < n) set(x, y, d !== 2 && d !== 4); } };
+  finder(3, 3); finder(n - 4, 3); finder(3, n - 4);
+  if (v > 1) { const a = n - 7; for (let dy = -2; dy <= 2; dy++) for (let dx = -2; dx <= 2; dx++) set(a + dx, a + dy, Math.max(Math.abs(dx), Math.abs(dy)) !== 1); }
+  const fmt = (mask) => {
+    let r = mask; for (let i = 0; i < 10; i++) r = (r << 1) ^ ((r >>> 9) * 0x537);
+    const b = ((mask << 10) | r) ^ 0x5412, gb = (i) => (b >>> i) & 1;
+    for (let i = 0; i <= 5; i++) set(8, i, gb(i)); set(8, 7, gb(6)); set(8, 8, gb(7)); set(7, 8, gb(8));
+    for (let i = 9; i < 15; i++) set(14 - i, 8, gb(i));
+    for (let i = 0; i < 8; i++) set(n - 1 - i, 8, gb(i));
+    for (let i = 8; i < 15; i++) set(8, n - 15 + i, gb(i));
+    set(8, n - 8, 1);
+  };
+  fmt(0);
+  let bi = 0;
+  for (let r = n - 1; r >= 1; r -= 2) {
+    if (r === 6) r = 5;
+    for (let vt = 0; vt < n; vt++) for (let j = 0; j < 2; j++) {
+      const x = r - j, y = ((r + 1) & 2) === 0 ? n - 1 - vt : vt;
+      if (!F[y][x] && bi < cw.length * 8) { M[y][x] = (cw[bi >>> 3] >>> (7 - (bi & 7))) & 1; bi++; }
+    }
+  }
+  const MK = [(x, y) => (x + y) % 2 === 0, (x, y) => y % 2 === 0, (x, y) => x % 3 === 0, (x, y) => (x + y) % 3 === 0,
+    (x, y) => (Math.floor(x / 3) + Math.floor(y / 2)) % 2 === 0, (x, y) => x * y % 2 + x * y % 3 === 0,
+    (x, y) => (x * y % 2 + x * y % 3) % 2 === 0, (x, y) => ((x + y) % 2 + x * y % 3) % 2 === 0];
+  const build = (m) => { const R = M.map(r => r.slice()); for (let y = 0; y < n; y++) for (let x = 0; x < n; x++) if (!F[y][x] && MK[m](x, y)) R[y][x] ^= 1; return R; };
+  const pen = (R) => {
+    let p = 0, dark = 0;
+    for (let a = 0; a < 2; a++) for (let i = 0; i < n; i++) {
+      const L = []; for (let j = 0; j < n; j++) L.push(a ? R[j][i] : R[i][j]);
+      let run = 1; for (let j = 1; j <= n; j++) { if (j < n && L[j] === L[j - 1]) run++; else { if (run >= 5) p += run - 2; run = 1; } }
+      const s = L.join(''); for (let j = 0; j + 11 <= n; j++) { const w = s.substr(j, 11); if (w === '10111010000' || w === '00001011101') p += 40; }
+    }
+    for (let y = 0; y < n - 1; y++) for (let x = 0; x < n - 1; x++) if (R[y][x] === R[y][x + 1] && R[y][x] === R[y + 1][x] && R[y][x] === R[y + 1][x + 1]) p += 3;
+    R.forEach(r => r.forEach(c => dark += c));
+    return p + Math.max(0, Math.ceil(Math.abs(dark * 20 / (n * n) - 10)) - 1) * 10;
+  };
+  let best = 0, bp = Infinity;
+  for (let m = 0; m < 8; m++) { const p = pen(build(m)); if (p < bp) { bp = p; best = m; } }
+  M = build(best); fmt(best);
+  let d = ''; for (let y = 0; y < n; y++) for (let x = 0; x < n; x++) if (M[y][x]) d += 'M' + (x + 2) + ' ' + (y + 2) + 'h1v1h-1z';
+  return `<svg viewBox="0 0 ${n + 4} ${n + 4}" shape-rendering="crispEdges"><path d="${d}" fill="#000"/></svg>`;
+}
+
+/* ---------- Получить ---------- */
+function openReceive() {
+  const who = tgUser && tgUser.username ? '@' + tgUser.username : '';
+  let qr = ''; try { qr = qrSvg(S.addr); } catch (e) {}
+  openSheet(tr('actReceive'), `
+    ${qr ? `<div class="qr">${qr}</div>` : ''}
+    <div class="fld"><label>${esc(tr('addrIn'))}</label><div class="addr" id="rcAddr">${esc(S.addr)}</div></div>
+    ${who ? `<div class="fld"><label>${esc(tr('orUser'))}</label><div class="addr">${esc(who)}</div></div>` : ''}
+    <button class="btn" id="rcCopy">${esc(tr('copyAddr'))}</button>
+    <p class="note">${esc(tr('receiveNote'))}</p>`, () => {
+    $('rcCopy').onclick = () => copyText(S.addr);
+  });
+}
+
+/* ---------- Отправить ---------- */
+function addRecent(to) { S.recent = [to].concat(S.recent.filter(x => x.toLowerCase() !== to.toLowerCase())).slice(0, 6); save(); }
+function openSend(sym) {
+  sym = sym || 'USDT';
+  const c = C[sym], b = S.bal[sym] || 0;
+  const short = (r) => r.length > 14 ? r.slice(0, 6) + '…' + r.slice(-4) : r;
+  const rc = S.recent.length ? `<div class="rct">${esc(tr('recents'))}</div><div class="rcl">${S.recent.map(r => `<button class="rcp" data-to="${esc(r)}"><i>${esc((r.replace(/^@/, '')[0] || '?').toUpperCase())}</i>${esc(short(r))}</button>`).join('')}</div>` : '';
+  openSheet(tr('actSend'), `
+    <button class="fld" style="width:100%;text-align:left" id="sdPick"><label>${esc(tr('assetAvail'))} ${fmtAmt(b)}</label><div class="sel">${icon(c, 1)}<b>${c.n} (${c.s})</b></div></button>
+    <div class="fld"><label>${esc(tr('recipient'))}</label><input id="sdTo" placeholder="${esc(tr('recipientPh'))}" autocomplete="off"></div>
+    ${rc}
+    <div class="fld"><label>${esc(tr('amount'))} <b id="sdMax" style="float:right;color:var(--lnk)">${esc(tr('max'))}</b></label><input id="sdAmt" inputmode="decimal" placeholder="0" autocomplete="off"></div>
+    <button class="btn" id="sdGo">${esc(tr('actSend'))}</button>
+    <p class="note">${esc(tr('sendNote'))}</p>`, () => {
+    $('sdPick').onclick = () => pickCoin(tr('pickAsset'), s => openSend(s));
+    $('sdMax').onclick = () => { $('sdAmt').value = fmtAmt(b); hap(); };
+    $('sheet').querySelectorAll('.rcp').forEach(x => x.onclick = () => { $('sdTo').value = x.dataset.to; $('sdAmt').focus(); hap(); });
+    $('sdAmt').addEventListener('input', e => e.target.value = e.target.value.replace(/[^0-9.,]/g, ''));
+    $('sdGo').onclick = async () => {
+      const a = parseFloat(($('sdAmt').value || '').replace(',', '.'));
+      const to = $('sdTo').value.trim();
+      if (to.length < 3) return toast(tr('needTo'));
+      if (!(a > 0)) return toast(tr('needAmt'));
+      if (a > S.bal[sym]) return toast(tr('noFunds'));
+      if (srv) {
+        try { applyState(await api('send', { to, sym, amount: a })); addRecent(to); hapOk(); closeSheet(); toast(tr('sent', { amount: fmtAmt(a), sym })); }
+        catch (e) { toast(e.message); }
+        return;
+      }
+      if (!isSelf(to)) return toast(tr('noRecipient'));
+      addHist('out', tr('sendHist', { sym }), '-' + fmtAmt(a) + ' ' + sym, tr('toSelf'));
+      addHist('in', tr('recvHist', { sym }), '+' + fmtAmt(a) + ' ' + sym, tr('fromSelf'));
+      addRecent(to); hapOk(); closeSheet(); renderAll(); toast(tr('sent', { amount: fmtAmt(a), sym }));
+    };
+  });
+}
+
+/* ---------- История ---------- */
+function openHistory() {
+  openSheet(tr('actHistory'), S.hist.length ? '<div class="card">' + S.hist.map(histRow).join('') + '</div>' : '<div class="empty">' + tr('noOps') + '</div>');
+}
+
+/* ---------- Обмен ---------- */
+let from = 'USDT', to = 'GRAM';
+const swapOut = () => (parseFloat(($('amt').value || '').replace(',', '.')) || 0) * C[from].p / C[to].p;
+function renderSwap() {
+  $('fromPick').innerHTML = icon(C[from], 1) + from + CHEV;
+  $('toPick').innerHTML = icon(C[to], 1) + to + CHEV;
+  $('fromBal').innerHTML = `${fmtAmt(S.bal[from] || 0)} <b id="maxBtn">${tr('max')}</b>`;
+  $('toBal').textContent = fmtAmt(S.bal[to] || 0);
+  $('maxBtn').onclick = () => { $('amt').value = fmtAmt(S.bal[from] || 0); hap(); updSwap(); };
+  $('rate').textContent = tr('rateText', { from, n: fmtAmt(C[from].p / C[to].p, 6), to });
+  updSwap();
+  const sw = S.hist.filter(h => h.type === 'swap').slice(0, 5);
+  $('swapHist').innerHTML = sw.length ? sw.map(histRow).join('') : '<div class="empty" style="padding:26px 0">' + tr('noSwaps') + '</div>';
+}
+function updSwap() {
+  const a = parseFloat(($('amt').value || '').replace(',', '.')) || 0;
+  $('outv').textContent = a > 0 ? fmtAmt(swapOut(), 8) : '0';
+  $('outv').classList.toggle('has', a > 0);
+  const btn = $('swapGo');
+  if (!(a > 0)) { btn.disabled = true; btn.textContent = tr('needAmt'); }
+  else if (a > (S.bal[from] || 0)) { btn.disabled = true; btn.textContent = tr('noSym', { sym: from }); }
+  else { btn.disabled = false; btn.textContent = tr('doSwap'); }
+}
+$('amt').addEventListener('input', (e) => { e.target.value = e.target.value.replace(/[^0-9.,]/g, ''); updSwap(); });
+$('fromPick').onclick = () => pickCoin(tr('youSend'), s => { if (s === to) to = from; from = s; $('amt').value = ''; renderSwap(); });
+$('toPick').onclick = () => pickCoin(tr('youGet'), s => { if (s === from) from = to; to = s; renderSwap(); });
+$('flip').onclick = () => {
+  [from, to] = [to, from]; $('amt').value = ''; hap();
+  $('flip').style.transform = 'rotate(180deg)'; setTimeout(() => $('flip').style.transform = '', 300);
+  renderSwap();
+};
+$('swapGo').onclick = async () => {
+  const a = parseFloat(($('amt').value || '').replace(',', '.'));
+  if (!(a > 0) || a > S.bal[from]) return;
+  const o = swapOut(), f = from, t = to;
+  if (srv) {
+    try { const j = await api('swap', { from: f, to: t, amount: a, out: o }); $('amt').value = ''; applyState(j); hapOk(); toast(tr('gotSwap', { amount: fmtAmt(o, 6), sym: t })); }
+    catch (e) { toast(e.message); }
+    return;
+  }
+  S.bal[f] -= a; S.bal[t] += o;
+  addHist('swap', tr('swapHistTitle', { f, t }), `+${fmtAmt(o, 6)} ${t}`, `-${fmtAmt(a)} ${f}`);
+  $('amt').value = ''; hapOk(); renderAll(); toast(tr('gotSwap', { amount: fmtAmt(o, 6), sym: t }));
+};
+
+/* ---------- Профиль ---------- */
+function renderProfile() {
+  const name = tgUser ? [tgUser.first_name, tgUser.last_name].filter(Boolean).join(' ') : TEXTS.guest;
+  const avaHtml = tgUser && tgUser.photo_url ? `<img src="${esc(tgUser.photo_url)}" alt="">` : esc((name[0] || 'C').toUpperCase());
+  $('meAva').innerHTML = avaHtml; $('chipAva').innerHTML = avaHtml;
+  $('meName').textContent = name; $('chipName').textContent = tgUser ? tgUser.first_name : TEXTS.guest;
+  $('meUser').textContent = tgUser && tgUser.username ? '@' + tgUser.username : '';
+  $('meId').textContent = tgUser ? tgUser.id : S.fid;
+  $('meAddr').textContent = S.addr.slice(0, 8) + '…' + S.addr.slice(-6);
+  $('meReg').textContent = new Date(S.reg).toLocaleDateString(tr('locale'), { day: 'numeric', month: 'long', year: 'numeric' });
+  $('meBal').textContent = S.hide ? '$ ••••' : '$' + fmtUsd(total());
+  const own = COINS.filter(c => (S.bal[c.s] || 0) > 0).sort((a, b) => S.bal[b.s] * b.p - S.bal[a.s] * a.p);
+  $('meAssets').innerHTML = own.length ? own.map(assetRow).join('') : '<div class="empty">' + tr('noAssets') + '</div>';
+  const hs = S.hist.slice(0, 20);
+  $('meHist').innerHTML = hs.length ? hs.map(histRow).join('') : '<div class="empty">' + tr('noOps') + '</div>';
+  $('swHide').classList.toggle('on', S.hide);
+  $('swNotif').classList.toggle('on', S.notif);
+}
+$('swHide').onclick = () => { S.hide = !S.hide; save(); hap(); renderAll(); };
+$('swNotif').onclick = () => { S.notif = !S.notif; save(); hap(); renderProfile(); };
+$('meAddr').onclick = () => copyText(S.addr);
+$('resetBtn').onclick = async () => {
+  if (!confirm(tr('confirmReset'))) return;
+  if (srv) { try { applyState(await api('reset')); toast(tr('resetDone')); } catch (e) { toast(e.message); } return; }
+  const keep = { reg: S.reg, fid: S.fid, addr: S.addr }; S = Object.assign(freshState(), keep); save(); renderAll(); toast(tr('resetDone'));
+};
+
+/* ---------- Экран монеты ---------- */
+let cur = null, crange = 'd1', cflt = { type: 'all', per: 'all' }, cpts = null, cdrag = false, cgeo = null;
+/* диапазон: [дней для API, длительность в мс для запасного графика] */
+const RANGES = { d1: [1, 864e5], d7: [7, 7 * 864e5], m1: [30, 30 * 864e5], y1: [365, 365 * 864e5], max: ['max', 3 * 365 * 864e5] };
+/* [значение, текст в списке, текст на плашке] */
+const TYPE_OPT = [['all', tr('fAllOps'), tr('fType')], ['in', tr('fIn')], ['out', tr('fOut')], ['swap', tr('fSwap')], ['bonus', tr('fBonus')]];
+const PER_OPT = [['all', tr('fAllTime'), tr('fPer')], ['day', tr('fDay')], ['week', tr('fWeek')], ['month', tr('fMonth')]];
+const chartCache = {};
+const coinImg = (s) => 'data:image/webp;base64,' + IMG[s];
+const ARROW = '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>';
+const AIC = {
+  in:   '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7 7 17M7 8v9h9"/></svg>',
+  out:  '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg>',
+  swap: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10h13l-4-4M17 14H4l4 4"/></svg>',
+};
+
+function tgBack(show) {
+  try {
+    if (!tg || !tg.BackButton) return;
+    tg.BackButton.offClick(closeCoin);
+    if (show) { tg.BackButton.onClick(closeCoin); tg.BackButton.show(); } else tg.BackButton.hide();
+  } catch (e) {}
+}
+
+function openCoin(sym) {
+  const c = C[sym];
+  if (!c || sym === 'XAUT') return; /* у Tether Gold экрана нет — там секретный бонус */
+  cur = sym; crange = 'd1'; cflt = { type: 'all', per: 'all' }; cpts = null; cdrag = false;
+  /* декоративные монетки вокруг главной: [x, y, размер, прозрачность] */
+  const dec = [[-76, -26, 26, 1], [-110, -4, 22, .8], [-76, 20, 24, .9], [76, -26, 26, 1], [110, -4, 22, .8], [76, 20, 24, .9]]
+    .map(([x, y, z, o]) => `<div class="sm" style="width:${z}px;height:${z}px;margin:${-z / 2 + y}px 0 0 ${-z / 2 + x}px;opacity:${(.22 * o).toFixed(2)}"><img src="${coinImg(sym)}" alt=""></div>`).join('');
+  const opts = (list) => list.map(o => `<option value="${o[0]}">${o[1]}</option>`).join('');
+  $('coin').innerHTML = `<div class="in">
+    <div class="cbar"><button id="cBack" aria-label="${esc(tr('back'))}">${ARROW}</button><h2>${APP_NAME}</h2><button id="cFav" aria-label="${esc(tr('favTitle'))}"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round">${STARP}</svg></button></div>
+    <div class="chero">${dec}<div class="big"><img src="${coinImg(sym)}" alt="${sym}"></div></div>
+    <div class="clab">${esc(tr('yourBal', { name: c.n }))}</div>
+    <div class="cusd" id="cUsd"></div>
+    <div class="camt" id="cAmt"></div>
+    <button class="caddr" id="cAddr"><span>${esc(tr('addrLabel'))}</span><span id="cAddrT"></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg></button>
+    <div class="actions">
+      <button class="act" id="cRecv"><div class="ic">${AIC.in}</div>${tr('actReceive')}</button>
+      <button class="act" id="cSend"><div class="ic">${AIC.out}</div>${tr('actSend')}</button>
+      <button class="act" id="cSwap"><div class="ic">${AIC.swap}</div>${tr('navSwap')}</button>
+    </div>
+    <div class="pcard">
+      <div class="pr"><b id="cPrice"></b><span id="cCh"></span></div>
+      <div class="pl" id="cPl">${esc(tr('pricePer', { sym }))}</div>
+      <div class="chart" id="cChart"></div>
+      <div class="ranges" id="cRanges">${Object.keys(RANGES).map(k => `<button data-r="${k}">${tr('rng_' + k)}</button>`).join('')}</div>
+    </div>
+    <div class="chh">${esc(tr('txHist'))}</div>
+    <div class="flt">
+      <label class="fp"><span id="fTypeL">${esc(tr('fType'))}</span>${CHEV}<select id="fType">${opts(TYPE_OPT)}</select></label>
+      <label class="fp"><span id="fPerL">${esc(tr('fPer'))}</span>${CHEV}<select id="fPer">${opts(PER_OPT)}</select></label>
+    </div>
+    <div class="card" id="cHist"></div>
+  </div>`;
+
+  $('cBack').onclick = () => { hap(); closeCoin(); };
+  $('cAddr').onclick = () => copyText(S.addr);
+  $('cFav').onclick = () => toggleFav(sym);
+  $('cRecv').onclick = () => { hap(); openReceive(); };
+  $('cSend').onclick = () => { hap(); openSend(sym); };
+  $('cSwap').onclick = () => {
+    hap(); closeCoin();
+    from = sym; if (to === from) to = sym === 'USDT' ? 'GRAM' : 'USDT';
+    $('amt').value = '';
+    $('nav').querySelector('[data-t="swap"]').click(); renderSwap();
+  };
+  $('cRanges').querySelectorAll('button').forEach(b => b.onclick = () => { if (crange === b.dataset.r) return; hap(); crange = b.dataset.r; setChart(); });
+  const pill = (selId, lblId, list, key) => {
+    $(selId).onchange = (e) => {
+      cflt[key] = e.target.value;
+      const o = list.find(x => x[0] === e.target.value);
+      $(lblId).textContent = e.target.value === 'all' ? o[2] : o[1];
+      renderCoinHist();
+    };
+  };
+  pill('fType', 'fTypeL', TYPE_OPT, 'type'); pill('fPer', 'fPerL', PER_OPT, 'per');
+
+  /* палец/мышь на графике — показывает цену в выбранной точке */
+  const ch = $('cChart');
+  const at = (e) => {
+    if (!cpts) return;
+    const rc = ch.getBoundingClientRect();
+    const x = Math.min(Math.max(e.clientX - rc.left, 0), rc.width);
+    showPt(Math.round(x / rc.width * (cpts.length - 1)));
+  };
+  ch.addEventListener('pointerdown', at); ch.addEventListener('pointermove', at);
+  ['pointerup', 'pointerleave', 'pointercancel'].forEach(t => ch.addEventListener(t, endPt));
+
+  $('coin').scrollTop = 0; $('coin').classList.add('on'); tgBack(true);
+  updateCoin(); setChart();
+}
+function closeCoin() {
+  cur = null; cdrag = false;
+  $('coin').classList.remove('on'); tgBack(false);
+}
+
+function updateCoin() {
+  if (!cur) return;
+  const c = C[cur], b = S.bal[cur] || 0;
+  $('cUsd').innerHTML = `<span>${S.hide ? '$••••' : '$' + fmtUsd(b * c.p)}</span>${S.hide ? EYE_OFF : EYE_ON}`;
+  $('cUsd').querySelector('.eye').onclick = () => { S.hide = !S.hide; save(); hap(); renderAll(); };
+  $('cAmt').textContent = (S.hide ? '••••' : fmtAmt(b)) + ' ' + c.s;
+  $('cAddrT').textContent = S.addr.slice(0, 8) + '…' + S.addr.slice(-6);
+  $('cFav').classList.toggle('on', S.fav.includes(cur));
+  if (!cdrag) $('cPrice').textContent = '$' + fmtPrice(c.p);
+  renderCoinHist();
+}
+
+/* история только по этой монете + фильтры */
+function renderCoinHist() {
+  const el = $('cHist'); if (!el || !cur) return;
+  const now = Date.now(), d0 = new Date(); d0.setHours(0, 0, 0, 0);
+  const since = { all: 0, day: d0.getTime(), week: now - 7 * 864e5, month: now - 30 * 864e5 }[cflt.per];
+  const re = new RegExp('(^|[^A-Z0-9])' + cur + '($|[^A-Z0-9])');
+  const list = S.hist
+    .filter(h => re.test(`${h.title} ${h.amount} ${h.sub || ''}`) && (cflt.type === 'all' || h.type === cflt.type) && h.t >= since)
+    .map(h => (h.type === 'swap' && !re.test(h.amount) && h.sub) ? Object.assign({}, h, { amount: h.sub, sub: h.amount }) : h);
+  el.innerHTML = list.length ? list.map(histRow).join('') : '<div class="empty">' + tr('noOps') + '</div>';
+}
+
+/* ----- график ----- */
+function rng(seed) {
+  let a = seed >>> 0;
+  return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+}
+/* запасной график — для Gram и когда API недоступен: случайное блуждание, заканчивающееся на текущей цене */
+function fakeSeries(c, rk) {
+  const N = 96, span = RANGES[rk][1], now = Date.now();
+  let seed = 7; for (const x of c.s + rk) seed = (seed * 31 + x.charCodeAt(0)) >>> 0;
+  const r = rng(seed), stable = c.s === 'USDT' || c.s === 'USDC';
+  const vol = (stable ? .0003 : c.s === 'GRAM' ? .002 : .008) * Math.pow(span / 864e5, .25);
+  const pull = stable ? .12 : .02;
+  const v = new Array(N); v[N - 1] = c.p;
+  for (let i = N - 1; i > 0; i--) { let x = v[i] * (1 + (r() - .5) * 2 * vol); x += (c.p - x) * pull; v[i - 1] = x; }
+  return v.map((y, i) => [now - span + i * span / (N - 1), y]);
+}
+const thin = (pts, n = 140) => {
+  if (pts.length <= n) return pts;
+  const st = (pts.length - 1) / (n - 1);
+  return Array.from({ length: n }, (_, i) => pts[Math.round(i * st)]);
+};
+async function loadChart(c, rk) {
+  let pts = null;
+  if (c.id) {
+    const days = rk === 'max' ? ['max', 365] : [RANGES[rk][0]];
+    for (const d of days) {
+      try {
+        const r = await fetch(`https://api.coingecko.com/api/v3/coins/${c.id}/market_chart?vs_currency=usd&days=${d}`,
+          { signal: (window.AbortSignal && AbortSignal.timeout) ? AbortSignal.timeout(7000) : undefined });
+        if (!r.ok) continue;
+        const j = await r.json();
+        if (j.prices && j.prices.length > 1) { pts = thin(j.prices); break; }
+      } catch (e) {}
+    }
+  }
+  if (!pts) pts = fakeSeries(c, rk);
+  chartCache[c.s + rk] = { t: Date.now(), pts };
+  return pts;
+}
+async function setChart() {
+  const sym = cur, rk = crange, el = $('cChart');
+  if (!el) return;
+  $('cRanges').querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.r === rk));
+  const hit = chartCache[sym + rk];
+  let pts;
+  if (hit && Date.now() - hit.t < 3e5) pts = hit.pts;
+  else { cpts = null; el.innerHTML = '<div class="cload">' + tr('loading') + '</div>'; pts = await loadChart(C[sym], rk); }
+  if (cur !== sym || crange !== rk) return; /* пока грузилось, переключились */
+  cpts = pts; drawChart();
+}
+function drawChart() {
+  const el = $('cChart'); if (!el || !cpts) return;
+  const W = el.clientWidth || 320, H = el.clientHeight || 150, pad = 10;
+  let mn = Infinity, mx = -Infinity;
+  cpts.forEach(p => { if (p[1] < mn) mn = p[1]; if (p[1] > mx) mx = p[1]; });
+  if (mx === mn) { mx += mx * .001 || 1; mn -= mn * .001 || 1; }
+  const n = cpts.length - 1;
+  const px = 7, X = (i) => px + i / n * (W - 2 * px), Y = (v) => pad + (1 - (v - mn) / (mx - mn)) * (H - 2 * pad);
+  cgeo = { X, Y };
+  const line = cpts.map((p, i) => (i ? 'L' : 'M') + X(i).toFixed(1) + ' ' + Y(p[1]).toFixed(1)).join('');
+  const first = cpts[0][1], last = cpts[n][1], up = last >= first;
+  const col = up ? '#3ec486' : '#ef6a65';
+  const pc = (last - first) / first * 100;
+  $('cCh').textContent = (pc > 0 ? '+' : '') + pc.toFixed(2) + '%';
+  $('cCh').style.color = up ? 'var(--green)' : 'var(--red)';
+  el.innerHTML = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
+    <defs><linearGradient id="cgr" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${col}" stop-opacity=".32"/><stop offset="1" stop-color="${col}" stop-opacity="0"/></linearGradient></defs>
+    <path d="${line}L${X(n).toFixed(1)} ${H}L${X(0).toFixed(1)} ${H}Z" fill="url(#cgr)"/>
+    <path d="${line}" fill="none" stroke="${col}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+    <line id="cX" x1="0" x2="0" y1="0" y2="${H}" stroke="#fff" stroke-opacity=".25" display="none"/>
+    <circle id="cDot" r="5" fill="#1a1c20" stroke="${col}" stroke-width="2.2" cx="${X(n).toFixed(1)}" cy="${Y(last).toFixed(1)}"/>
+  </svg>`;
+}
+function showPt(i) {
+  if (!cpts || !cgeo || !$('cX')) return;
+  const p = cpts[i], x = cgeo.X(i);
+  cdrag = true;
+  $('cX').setAttribute('x1', x); $('cX').setAttribute('x2', x); $('cX').removeAttribute('display');
+  $('cDot').setAttribute('cx', x); $('cDot').setAttribute('cy', cgeo.Y(p[1]));
+  $('cPrice').textContent = '$' + fmtPrice(p[1]);
+  const d = new Date(p[0]);
+  $('cPl').textContent = (crange === 'y1' || crange === 'max')
+    ? d.toLocaleDateString(tr('locale'), { day: 'numeric', month: 'short', year: 'numeric' }) : fmtDate(p[0]);
+}
+function endPt() {
+  if (!cdrag) return;
+  cdrag = false;
+  if (!cur) return;
+  if ($('cX')) {
+    $('cX').setAttribute('display', 'none');
+    const n = cpts.length - 1;
+    $('cDot').setAttribute('cx', cgeo.X(n)); $('cDot').setAttribute('cy', cgeo.Y(cpts[n][1]));
+  }
+  $('cPrice').textContent = '$' + fmtPrice(C[cur].p);
+  $('cPl').textContent = tr('pricePer', { sym: cur });
+}
+window.addEventListener('resize', () => { if (cur && cpts) drawChart(); });
+
+/* из вкладки «Аккаунт» монета тоже открывается */
+$('meAssets').addEventListener('click', (e) => {
+  const r = e.target.closest('.row[data-s]'); if (!r) return;
+  hap(); openCoin(r.dataset.s);
+});
+
+/* ---------- Навигация ---------- */
+$('nav').querySelectorAll('button').forEach(b => b.onclick = () => {
+  hap();
+  $('nav').querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b));
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('on', t.id === 't-' + b.dataset.t));
+  window.scrollTo({ top: 0 });
+});
+$('chip').onclick = () => $('nav').querySelector('[data-t="me"]').click();
+
+function renderAll() { save(); renderWallet(); renderSwap(); renderProfile(); updateCoin(); }
+
+/* ---------- Живые курсы ---------- */
+async function loadPrices() {
+  try {
+    const ids = COINS.filter(c => c.id).map(c => c.id).join(',');
+    const r = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=' + ids + '&vs_currencies=usd&include_24hr_change=true');
+    if (!r.ok) throw 0;
+    const d = await r.json();
+    COINS.forEach(c => { if (c.id && d[c.id]) { c.p = d[c.id].usd; c.ch = d[c.id].usd_24h_change || 0; } });
+    $('updated').textContent = tr('updated', { time: new Date().toLocaleTimeString(tr('locale'), { hour: '2-digit', minute: '2-digit' }) });
+    renderAll();
+  } catch (e) { $('updated').textContent = tr('offline'); }
+}
+
+/* ---------- Синхронизация с сервером ---------- */
+function applyState(j) {
+  S.bal = Object.assign({}, S.bal, j.bal); S.hist = j.hist || []; S.addr = j.address || S.addr;
+  if (j.reg) S.reg = j.reg;
+  renderAll();
+}
+let lastSig = '';
+async function syncServer(first) {
+  if (document.hidden && !first) return;
+  try {
+    const j = await api('sync');
+    const prevMax = S.hist.reduce((m, h) => Math.max(m, h.id || 0), 0);
+    const wasSrv = srv; srv = true;
+    const sig = JSON.stringify([j.bal, j.hist.length ? j.hist[0].id : 0]);
+    if (wasSrv && sig === lastSig) return;
+    lastSig = sig;
+    const fresh = (wasSrv || prevMax) ? j.hist.filter(h => h.id > prevMax && h.type === 'in') : [];
+    applyState(j);
+    if (fresh.length) {
+      notifyIn(fresh);
+    }
+  } catch (e) { /* сервера нет — работаем локально */ }
+}
+syncServer(true);
+setInterval(() => { if (srv) syncServer(false); }, 5000);
+document.addEventListener('visibilitychange', () => { if (!document.hidden && srv) syncServer(false); });
+
+document.title = APP_NAME;
+document.getElementById('brandName').textContent = APP_NAME;
+document.getElementById('profileNote').textContent = tr('profileNote');
+renderAll();
+loadPrices();
+setInterval(loadPrices, 60000);
+</script>
+</body>
+</html>
